@@ -28,7 +28,7 @@ RUN cd $BUILD_DIRECTORY && \
         --with-odbc=yes \
         --with-liblas=yes \
         --with-liblas-config=/usr/bin/liblas-config && \
-    echo "y" | make -j`nproc`
+    echo "y" | make -j`nproc` && \
     sudo ln -s /usr/local/src/grass70/bin.x86_64-unknown-linux-gnu/grass70 /usr/bin/grass70
 
 USER root
