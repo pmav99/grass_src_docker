@@ -135,10 +135,10 @@ RUN add-apt-repository -y ppa:saiarcot895/myppa && \
         libgta-dev \
         # GDAL can be compiled with opencl although I am not sure if GRASS needs it. \
         opencl-headers \
-        ocl-icd-libopencl1 && \
+        ocl-icd-libopencl1 \
         # these are necessary for the GUI
         xorg \
-        hicolor-icon-theme \
+        hicolor-icon-theme && \
     # clean up
     apt-get autoremove -y && \
     apt-get clean && \
