@@ -33,10 +33,15 @@ docker build \
     -t grass702 \
     ./
 
+docker build \
+    -f grass7_70_trunk.docker \
+    -t grass70_trunk \
+    ./
+
 docker run \
     --rm \
     --volumes-from grass7_datasets \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v ~/:/home/grassuser/hosthome \
-    -e DISPLAY=unix:$DISPlAY \
+    -e DISPLAY=unix:0 \
     -it grass702;

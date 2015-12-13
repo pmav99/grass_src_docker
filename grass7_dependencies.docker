@@ -20,20 +20,18 @@ RUN cd $BUILD_DIRECTORY && \
     rm  ../../${PROJ_VERSION}.zip && \
     cd $BUILD_DIRECTORY/proj.4-$PROJ_VERSION && \
     ./configure && \
-    echo "yes" | make -j`nproc`
-
-# download and compile GEOS
-RUN cd $BUILD_DIRECTORY && \
+    echo "yes" | make -j`nproc` && \
+    # download and compile GEOS \
+    cd $BUILD_DIRECTORY && \
     wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 && \
     bunzip2 geos-${GEOS_VERSION}.tar.bz2 && \
     tar xvf geos-${GEOS_VERSION}.tar && \
     cd geos-${GEOS_VERSION} && \
     ./configure && \
     echo "yes" | make -j`nproc` && \
-    rm ../geos-${GEOS_VERSION}.tar
-
-# download and compile GDAL
-RUN cd $BUILD_DIRECTORY && \
+    rm ../geos-${GEOS_VERSION}.tar && \
+    # download and compile GDAL \
+    cd $BUILD_DIRECTORY && \
     wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz && \
     tar -xzf gdal-${GDAL_VERSION}.tar.gz && \
     cd gdal-${GDAL_VERSION} && \
@@ -55,19 +53,22 @@ RUN cd $BUILD_DIRECTORY && \
         --without-ogdi \
         --with-pg=/usr/bin/pg_config \
         --with-xerces=yes && \
-    echo "yes" | make -j`nproc`
-
-USER root
-RUN echo '/usr/local/lib' >> /etc/ld.so.conf && \
+    echo "yes" | make -j`nproc` && \
+    # become root and install packages
     # install PROJ
     cd $BUILD_DIRECTORY/proj.4-$PROJ_VERSION && \
-    checkinstall && \
-    ldconfig && \
+    sudo checkinstall && \
+    sudo ldconfig && \
     # install geos
     cd $BUILD_DIRECTORY/geos-$GEOS_VERSION && \
-    checkinstall && \
-    ldconfig && \
+    sudo checkinstall && \
+    sudo ldconfig && \
     # install gdal
     cd $BUILD_DIRECTORY/gdal-$GDAL_VERSION && \
-    checkinstall && \
-    ldconfig
+    sudo checkinstall && \
+    sudo ldconfig && \
+    # you can now remove the src directories
+    cd $BUILD_DIRECTORY && \
+    sudo rm -rf gdal-${GDAL_VERSION} proj.4-${PROJ_VERSION} geos-${GEOS_VERSION}
+
+ENTRYPOINT ["/bin/bash"]

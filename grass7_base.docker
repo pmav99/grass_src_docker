@@ -31,9 +31,7 @@ RUN add-apt-repository -y ppa:saiarcot895/myppa && \
         htop \
         silversearcher-ag \
         unzip \
-    # Install GRASS dependencies. Copy pasted from the wiki \
-        -o APT::Install-Recommends=false \
-        -o APT::Install-Suggests=false \
+        # Install GRASS dependencies. Copy pasted from the wiki \
         build-essential \
         flex \
         make \
@@ -52,6 +50,7 @@ RUN add-apt-repository -y ppa:saiarcot895/myppa && \
         python-dateutil \
         libgsl0-dev \
         python-numpy \
+        python-matplotlib \
         wx2.8-headers \
         wx-common \
         libwxgtk2.8-dev \
@@ -137,6 +136,9 @@ RUN add-apt-repository -y ppa:saiarcot895/myppa && \
         # GDAL can be compiled with opencl although I am not sure if GRASS needs it. \
         opencl-headers \
         ocl-icd-libopencl1 && \
+        # these are necessary for the GUI
+        xorg \
+        hicolor-icon-theme \
     # clean up
     apt-get autoremove -y && \
     apt-get clean && \
