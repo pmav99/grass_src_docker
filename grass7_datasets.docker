@@ -1,0 +1,26 @@
+# Ubuntu 14.04 Trusty Tahyr
+# This image will create a data only container with the sample GRASS 7 datasets.
+FROM grass_base
+
+MAINTAINER Panos Mavrogiorgos <pmav99 - gmail >
+
+ENV GRASS_SAMPLE_LOCATIONS=/home/$GRASS_USER/sample_locations \
+    UNPACK_DATASETS_SCRIPT=/home/$GRASS_USER/sample_locations/unpack_datasets.sh
+
+USER $GRASS_USER
+RUN mkdir -p $GRASS_SAMPLE_LOCATIONS && \
+    cd $GRASS_SAMPLE_LOCATIONS && \
+    # download the North Carolina and spearfish datasets.
+    # + the temporal dataset from the temporal workshop
+    curl -O http://grass.osgeo.org/sampledata/nc_spm_latest.tar.gz && \
+    curl -O http://grass.osgeo.org/sampledata/spearfish_grass70data-0.3.tar.gz && \
+    curl -O http://fatra.cnr.ncsu.edu/temporal-grass-workshop/NC_spm_temporal_workshop.zip && \
+    # add a script for unpacking the datasets.
+    touch $UNPACK_DATASETS_SCRIPT && \
+    echo "unzip -o NC_spm_temporal_workshop.zip" >> $UNPACK_DATASETS_SCRIPT && \
+    echo "tar -xzf nc_spm_latest.tar.gz" >> $UNPACK_DATASETS_SCRIPT && \
+    echo "tar -xzf spearfish_grass70data-0.3.tar.gz" >> $UNPACK_DATASETS_SCRIPT
+
+VOLUME $GRASS_SAMPLE_LOCATIONS
+
+CMD ["echo", "Data container for GRASS data."]

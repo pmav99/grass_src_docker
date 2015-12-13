@@ -1,0 +1,54 @@
+FROM grass7_dependencies:latest
+MAINTAINER Panos Mavrogiorgos <pmav99 - gmail >
+
+# Compile grass
+ENV GRASS_VERSION=7.0.2
+
+USER $GRASS_USER
+RUN cd $BUILD_DIRECTORY && \
+    wget https://grass.osgeo.org/grass70/source/grass-${GRASS_VERSION}.tar.gz && \
+    tar -xzvf grass-${GRASS_VERSION}.tar.gz && \
+    #svn co https://svn.osgeo.org/grass/grass/branches/releasebranch_7_0 $GRASS_VERSION && \
+    #mv $GRASS_VERSION $BUILD_DIRECTORY/grass-$GRASS_VERSION && \
+    cd grass-$GRASS_VERSION && \
+    CFLAGS='-O2 -Wall' LDFLAGS='-s' ./configure \
+        --enable-largefile=yes \
+        --with-nls \
+        --with-cxx \
+        --with-readline \
+        --with-pthread \
+        --with-proj-share=/usr/local/share/proj/ \
+        --with-geos=/usr/local/bin/geos-config \
+        --with-wxwidgets \
+        --with-cairo \
+        --with-opengl-libs=/usr/include/GL \
+        --with-freetype=yes \
+        --with-freetype-includes='/usr/include/freetype2/' \
+        --with-postgres=yes \
+        --with-postgres-includes='/usr/include/postgresql' \
+        --with-sqlite=yes \
+        --with-mysql=yes --with-mysql-includes='/usr/include/mysql' \
+        --with-odbc=yes \
+        --with-liblas=yes \
+        --with-liblas-config=/usr/bin/liblas-config && \
+    echo "y" | make -j`nproc`
+USER root
+RUN cd $BUILD_DIRECTORY/grass-$GRASS_VERSION && \
+    checkinstall && \
+    ldconfig
+
+# XXX move this
+RUN apt-fast update && \
+    apt-fast -y install \
+    -o APT::Install-Recommends=false \
+    -o APT::Install-Suggests=false \
+    xorg \
+    hicolor-icon-theme
+
+# XXX move this
+USER $GRASS_USER
+RUN mkdir -p /home/$GRASS_USER/.local/share/ && \
+    touch /home/$GRASS_USER/.local/share/recently-used.xbel
+
+USER root
+ENTRYPOINT ["/bin/bash"]
