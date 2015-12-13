@@ -7,9 +7,8 @@ ENV GRASS_VERSION=7.0.2
 
 USER $GRASS_USER
 RUN cd $BUILD_DIRECTORY && \
-    wget https://grass.osgeo.org/grass70/source/grass-${GRASS_VERSION}.tar.gz && \
-    tar -xzvf grass-${GRASS_VERSION}.tar.gz && \
-    cd $BUILD_DIRECTORY/grass-$GRASS_VERSION && \
+    svn co https://svn.osgeo.org/grass/grass/branches/releasebranch_7_0 grass-$GRASS_VERSION && \
+    cd grass-$GRASS_VERSION && \
     CFLAGS='-O2 -Wall' LDFLAGS='-s' ./configure \
         --enable-largefile=yes \
         --with-nls \
