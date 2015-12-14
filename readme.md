@@ -1,13 +1,7 @@
-# Usage
+# Sample locations
 
+`nc_basic_spm` is a directory containing a sample GRASS GIS `Location`.
 
-Just execute `build.sh` and you will end up in a root console.  There is also a normal user named
-`grassuser` who has passwordless suod enabled and also has some sample GRASS locations in his home
-directory.
-
-## GUI
-
-In order to be able to run the GUI you need to enable docker to access the host's X server:
-```
-xhost +local:docker
-```
+This `Location` contains only a small subset of the full North Carolina dataset.  If you wish, you
+can download the full dataset from
+[here](https://grass.osgeo.org/sampledata/north_carolina/nc_spm_latest.tar.gz).
