@@ -231,4 +231,4 @@ RUN cd $BUILD_DIRECTORY && \
     sudo ldconfig && \
     # you can now remove the src directories
     cd $BUILD_DIRECTORY && \
-    sudo rm -rf gdal-${GDAL_VERSION} proj.4-${PROJ_VERSION} geos-${GEOS_VERSION}
+    sudo rm -rf gdal-${GDAL_VERSION}* proj.4-${PROJ_VERSION} geos-${GEOS_VERSION}
