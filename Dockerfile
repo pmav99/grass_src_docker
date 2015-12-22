@@ -3,7 +3,7 @@ FROM quay.io/pmav99/grass_docker_src:base
 MAINTAINER Panos Mavrogiorgos <pmav99 - gmail >
 
 # Compile grass
-ENV GRASS_VERSION=7.0.2
+ENV GRASS_VERSION=trunk7
 
 USER $GRASS_USER
 RUN cd $BUILD_DIRECTORY && \
@@ -30,6 +30,6 @@ RUN cd $BUILD_DIRECTORY && \
         --with-liblas=yes \
         --with-liblas-config=/usr/bin/liblas-config && \
     echo "y" | make -j`nproc` && \
-    sudo ln -s /usr/local/src/grass70/bin.x86_64-unknown-linux-gnu/grass70 /usr/bin/grass70
+    sudo ln -s /usr/local/src/grass-$GRASS_VERSION/bin.x86_64-unknown-linux-gnu/grass70 /usr/bin/grass7
 
 ENTRYPOINT ["/bin/bash"]
