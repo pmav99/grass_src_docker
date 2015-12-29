@@ -52,6 +52,7 @@ RUN add-apt-repository -y ppa:saiarcot895/myppa && \
         vim-gtk \
         tree \
         htop \
+        bash-completion \
         silversearcher-ag \
         unzip \
         # Install GRASS dependencies. Copy pasted from the wiki \
