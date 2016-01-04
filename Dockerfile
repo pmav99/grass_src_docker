@@ -9,7 +9,8 @@ ENV GRASS_USER=grassuser \
     PROJ_VERSION=4.9.2 \
     PROJ_DATUMGRID_VERSION=1.5 \
     GEOS_VERSION=3.4.2 \
-    GDAL_VERSION=1.11.3
+    GDAL_VERSION=1.11.3 \
+    SHELL=/bin/bash
 
 RUN useradd $GRASS_USER -m -s /bin/bash && \
     adduser $GRASS_USER sudo && \
