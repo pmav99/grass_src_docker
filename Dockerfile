@@ -5,7 +5,7 @@ MAINTAINER Panos Mavrogiorgos <pmav99 - gmail >
 # we are going to create a normal user that is going to be used for building
 # the various libs and running GRASS. We are also granting him password-less sudo
 ENV GRASS_USER=grassuser \
-    GRASS_SAMPLE_LOCATIONS=/home/$GRASS_USER/sample_locations
+    GRASS_SAMPLE_LOCATIONS=/home/grassuser/sample_locations
 
 RUN useradd $GRASS_USER -m -s /bin/bash && \
     su $GRASS_USER && \
