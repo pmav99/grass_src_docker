@@ -30,6 +30,6 @@ RUN cd $BUILD_DIRECTORY && \
         --with-liblas=yes \
         --with-liblas-config=/usr/bin/liblas-config && \
     echo "y" | make -j`nproc` && \
-    sudo ln -sf /usr/local/src/grass-$GRASS_VERSION/bin.x86_64-unknown-linux-gnu/grass70 /usr/bin/grass7
+    sudo ln -sf /usr/local/src/grass-$GRASS_VERSION/bin.x86_64-pc-linux-gnu/grass70 /usr/bin/grass7
 
 ENTRYPOINT ["/bin/bash"]
