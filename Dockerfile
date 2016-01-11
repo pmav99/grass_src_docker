@@ -2,8 +2,6 @@ FROM phusion/baseimage:0.9.17
 
 MAINTAINER Panos Mavrogiorgos <pmav99 - gmail >
 
-# we are going to create a normal user that is going to be used for building
-# the various libs and running GRASS. We are also granting him password-less sudo
 ENV GRASS_USER=grassuser \
     BUILD_DIRECTORY=/usr/local/src \
     PROJ_VERSION=4.9.2 \
@@ -12,6 +10,8 @@ ENV GRASS_USER=grassuser \
     GDAL_VERSION=1.11.3 \
     SHELL=/bin/bash
 
+# we are going to create a normal user that is going to be used for building
+# the various libs and running GRASS. We are also granting him password-less sudo
 RUN useradd $GRASS_USER -m -s /bin/bash && \
     adduser $GRASS_USER sudo && \
     echo "$GRASS_USER ALL=(ALL) NOPASSWD: ALL" | tee -a /etc/sudoers && \
@@ -20,15 +20,17 @@ RUN useradd $GRASS_USER -m -s /bin/bash && \
     chown $GRASS_USER:$GRASS_USER $BUILD_DIRECTORY && \
     chmod ug+rwx $BUILD_DIRECTORY && \
     # add the local lib to ld.so.conf \
-    echo '/usr/local/lib' | tee -a /etc/ld.so.conf && \
-    # GRASS complains if the following file is missing
-    su $GRASS_USER && \
-    mkdir -p /home/$GRASS_USER/.local/share/ && \
+    echo '/usr/local/lib' | tee -a /etc/ld.so.conf
+
+# GRASS complains if the following file is missing
+USER $GRASS_USER
+RUN mkdir -p /home/$GRASS_USER/.local/share/ && \
     touch /home/$GRASS_USER/.local/share/recently-used.xbel
 
 # We are going to add a ppa that provides apt-fast (i.e. an apt wrapper that uses aria2c).
 # While we do so we will also add some addititonal ppas that are going to be needed.
 # gta is needed for gdal (not sure if it is needed for GRASS though).
+USER root
 RUN add-apt-repository -y ppa:saiarcot895/myppa && \
     add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable && \
     add-apt-repository -y ppa:marlam/gta && \
