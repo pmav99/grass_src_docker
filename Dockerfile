@@ -3,12 +3,14 @@ FROM quay.io/pmav99/grass_docker_src:base
 MAINTAINER Panos Mavrogiorgos <pmav99 - gmail >
 
 # Compile grass
-ENV GRASS_VERSION=trunk7
+ENV GRASS_VERSION=70 \
+    GRASS_SVN_URL=https://svn.osgeo.org/grass/grass/trunk \
+    GRASS_SVN_DIR=/usr/local/src/grass_svn
 
 USER $GRASS_USER
-RUN cd $BUILD_DIRECTORY && \
-    svn co https://svn.osgeo.org/grass/grass/branches/releasebranch_7_0 grass-$GRASS_VERSION && \
-    cd grass-$GRASS_VERSION && \
+WORKDIR $BUILD_DIRECTORY
+RUN svn co $GRASS_SVN_URL $GRASS_SVN_DIR && \
+    cd $GRASS_SVN_DIR && \
     CFLAGS='-O2 -Wall' LDFLAGS='-s' ./configure \
         --enable-largefile=yes \
         --with-nls \
@@ -30,6 +32,6 @@ RUN cd $BUILD_DIRECTORY && \
         --with-liblas=yes \
         --with-liblas-config=/usr/bin/liblas-config && \
     echo "y" | make -j`nproc` && \
-    sudo ln -sf /usr/local/src/grass-$GRASS_VERSION/bin.x86_64-pc-linux-gnu/grass70 /usr/bin/grass7
+    sudo ln -sf $GRASS_SVN_DIR/bin.x86_64-pc-linux-gnu/grass$GRASS_VERSION /usr/bin/grass
 
 ENTRYPOINT ["/bin/bash"]
